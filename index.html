@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>우마워들 - 우마무스메 추리 게임</title>
+<style>
+:root{
+  --bg:#f3f5f8;--card:#fff;--line:#dfe4ea;--ink:#20242a;--muted:#69727e;
+  --exact:#59a56f;--near:#d8ad3d;--miss:#818995;--accent:#2e67d1;--danger:#c94242;
+  font-family:Inter,Pretendard,"Noto Sans KR",system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg)
+}
+*{box-sizing:border-box} body{margin:0;min-height:100vh} button,input,select,textarea{font:inherit}
+button{cursor:pointer}.hidden{display:none!important}.wrap{max-width:1500px;margin:auto;padding:20px}
+header{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:12px}
+.title{font-size:clamp(28px,4vw,46px);font-weight:950;letter-spacing:-.04em}.subtitle{color:var(--muted);margin-top:4px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 18px}.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 17px;font-weight:900}.tab.active{background:#20242a;color:#fff;border-color:#20242a}
+.panel{min-height:420px}.start-card,.manager-card,.answer-card{background:#fff;border:1px solid #e8ebef;border-radius:22px;box-shadow:0 8px 28px #1d243012}
+.start-card{max-width:760px;margin:34px auto;padding:34px;text-align:center}.start-card h2{font-size:32px;margin:0 0 8px}.start-card p{color:var(--muted);line-height:1.65;margin:0 auto 24px;max-width:600px}
+.start-controls{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}.attempt-box{display:flex;align-items:center;gap:9px;background:#f7f8fa;border:1px solid var(--line);padding:8px 10px;border-radius:14px;font-weight:850}.attempt-box input{width:76px;border:0;background:transparent;text-align:center;font-weight:950;outline:none}
+.primary{border:0;background:var(--accent);color:#fff;border-radius:14px;padding:13px 24px;font-weight:950}.secondary{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font-weight:850}.danger{background:#feeaea;color:#a82323;border:1px solid #f5c7c7}.good{background:#eaf8ee;color:#176a35;border:1px solid #ccebd5}
+.legend{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:22px;color:#5f6771;font-size:13px;font-weight:800}.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}.dot.exact{background:var(--exact)}.dot.near{background:var(--near)}.dot.miss{background:var(--miss)}
+.game-legend{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:-2px auto 16px;font-size:13px;font-weight:900}.legend-pill{display:inline-flex;align-items:center;justify-content:center;border-radius:7px;padding:5px 9px;color:#fff;line-height:1.15;box-shadow:inset 0 0 0 1px #ffffff18}.legend-pill.exact{background:var(--exact)}.legend-pill.near{background:var(--near)}.legend-pill.miss{background:var(--miss)}.legend-arrow{color:#3f4854;white-space:nowrap;padding:4px 2px}
+.game-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.status{font-weight:950}.status b{font-size:24px}.guess-zone{position:relative;max-width:680px;margin:0 auto 18px}.guess-row{display:flex;gap:8px}.guess-input{flex:1;border:2px solid #cfd5dd;background:#fff;border-radius:14px;padding:13px 15px;font-weight:850;outline:none}.guess-input:focus{border-color:#7898d7}.guess-btn{border:0;background:#20242a;color:#fff;border-radius:14px;padding:0 22px;font-weight:950}.suggestions{position:absolute;z-index:30;top:calc(100% + 7px);left:0;right:80px;max-height:300px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 15px 35px #11182725}.suggestion{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid #edf0f3}.suggestion:last-child{border-bottom:0}.suggestion:hover,.suggestion.active{background:#f3f6fb}.suggestion img{width:42px;height:50px;object-fit:cover;border-radius:8px;background:#eceff3}.suggestion-name{font-weight:900}.suggestion-sub{font-size:12px;color:#7a828c}.used{color:#a5abb3;font-size:11px}
+.table-wrap{overflow:auto;background:#fff;border:1px solid #e6eaef;border-radius:18px;box-shadow:0 7px 24px #1d24300e}.guess-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1180px}.guess-table th{position:sticky;top:0;background:#f7f8fa;z-index:2;padding:12px 8px;border-bottom:1px solid var(--line);font-size:12px;white-space:nowrap}.guess-table td{padding:8px;border-bottom:1px solid #edf0f3;vertical-align:middle}.guess-table tr:last-child td{border-bottom:0}.who{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center;min-width:175px}.who img{width:54px;height:68px;object-fit:cover;border-radius:9px;background:#eceff3}.who-name{font-weight:950}.who-sub{font-size:11px;color:#7d858f;margin-top:4px}
+.cmp{min-height:58px;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;color:white;font-weight:950;padding:7px 6px;line-height:1.15}.cmp.exact{background:var(--exact)}.cmp.near{background:var(--near)}.cmp.miss{background:var(--miss)}.cmp.unknown{background:#bec3c9;color:#42474d}.cmp small{display:block;font-size:10px;opacity:.92;margin-top:4px}.arrow{font-size:17px;margin-left:3px}.group{display:flex;gap:5px;justify-content:center;min-width:max-content}.mini{min-width:44px;min-height:58px;padding:6px 4px;border-radius:9px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:12px}.mini.exact{background:var(--exact)}.mini.near{background:var(--near)}.mini.miss{background:var(--miss)}.mini.unknown{background:#bec3c9;color:#42474d}.mini em{font-style:normal;font-size:10px;opacity:.9;margin-bottom:2px}.mini b{font-size:14px}
+.answer-card{max-width:860px;margin:18px auto 0;padding:20px;display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:center}.answer-card img{width:180px;height:225px;object-fit:cover;border-radius:16px;background:#eceff3}.answer-card h2{margin:0 0 6px;font-size:28px}.answer-card .result-title{font-size:14px;font-weight:950;color:var(--accent);margin-bottom:4px}.answer-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{background:#f3f5f7;border:1px solid #e3e7ec;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:850}.answer-actions{margin-top:15px;display:flex;gap:8px;flex-wrap:wrap}
+.manager-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.manager-summary{font-weight:900;color:#555e68}.tool-row{display:flex;gap:8px;flex-wrap:wrap}.filebtn{position:relative;overflow:hidden}.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}.manager-grid{display:grid;grid-template-columns:minmax(320px,410px) 1fr;gap:16px}.manager-card{padding:16px}.manager-card h3{margin:0 0 12px}.editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:850;color:#626b76}.field input,.field textarea{width:100%;border:1px solid #d7dce3;border-radius:9px;padding:9px 10px;background:#fff;outline:none}.field textarea{min-height:76px;resize:vertical}.field input:focus,.field textarea:focus{border-color:#8aa4d7}.section-label{grid-column:1/-1;font-weight:950;margin-top:8px;padding-top:9px;border-top:1px solid #eceff2}.apt-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.img-editor{grid-column:1/-1;display:grid;grid-template-columns:110px 1fr;gap:10px}.preview{width:110px;height:138px;border-radius:12px;overflow:hidden;background:#edf0f3;display:grid;place-items:center;color:#858d97;font-size:11px;text-align:center}.preview img{width:100%;height:100%;object-fit:cover}.editor-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.manager-search{width:100%;border:1px solid #d7dce3;border-radius:10px;padding:10px 12px;margin-bottom:10px}.char-list{max-height:900px;overflow:auto;display:grid;gap:7px}.char-row{display:grid;grid-template-columns:46px 1fr auto;gap:9px;align-items:center;border:1px solid #e3e7ec;border-radius:11px;padding:7px;background:#fff}.char-row:hover{background:#f8f9fb}.char-row img{width:46px;height:58px;object-fit:cover;border-radius:7px;background:#eceff3}.char-row .nm{font-weight:900}.char-row .meta{font-size:11px;color:#757d87;margin-top:3px}.char-row button{border:0;background:#edf0f4;border-radius:8px;padding:7px 9px;font-weight:800}.notice{background:#fff8dc;border:1px solid #ecd675;border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.5;margin-bottom:12px}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(10px);background:#20242a;color:#fff;border-radius:999px;padding:10px 15px;font-weight:850;opacity:0;pointer-events:none;transition:.18s;z-index:100}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:900px){.manager-grid{grid-template-columns:1fr}.answer-card{grid-template-columns:130px 1fr}.answer-card img{width:130px;height:165px}}
+@media(max-width:640px){.wrap{padding:12px}header{align-items:start}.subtitle{font-size:13px}.start-card{padding:24px 16px;margin:22px auto}.guess-row{flex-direction:column}.guess-btn{padding:12px}.suggestions{right:0}.answer-card{grid-template-columns:1fr;text-align:center}.answer-card img{margin:auto}.answer-actions{justify-content:center}.editor-grid{grid-template-columns:1fr}.field.full,.section-label,.apt-grid,.img-editor{grid-column:1}.apt-grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><div class="title">우마워들</div><div class="subtitle">142명 중 한 명을 찾아내는 우마무스메 워들</div></div>
+</header>
+<div class="tabs">
+  <button class="tab active" data-panel="gamePanel">게임</button>
+  <button class="tab" data-panel="dataPanel">데이터 관리</button>
+</div>
+
+<section id="gamePanel" class="panel">
+  <div id="startScreen" class="start-card">
+    <h2>정답 말딸을 찾아라</h2>
+    <p>시작할 때 142명 중 한 명이 비밀 정답으로 정해집니다. 이름을 검색해 추측하면 G1 승수, 출생년도, 신장, 스리사이즈, 적성을 비교해 힌트를 줍니다.</p>
+    <div class="start-controls">
+      <label class="attempt-box">제한 횟수 <input id="attemptLimit" type="number" min="1" max="30" value="8"> 회</label>
+      <button id="startBtn" class="primary">게임 시작</button>
+    </div>
+    <div class="legend"><span><i class="dot exact"></i>일치</span><span><i class="dot near"></i>비슷함</span><span><i class="dot miss"></i>다름</span><span>↑ 정답이 더 높음 · ↓ 정답이 더 낮음</span></div>
+  </div>
+
+  <div id="playScreen" class="hidden">
+    <div class="game-head"><div class="status">남은 기회 <b id="remaining">0</b> / <span id="limitLabel">0</span></div><button id="quitBtn" class="secondary">게임 종료</button></div>
+    <div class="guess-zone">
+      <div class="guess-row"><input id="guessInput" class="guess-input" autocomplete="off" placeholder="말딸 이름을 입력하거나 목록에서 선택"><button id="guessBtn" class="guess-btn">추측</button></div>
+      <div id="suggestions" class="suggestions hidden"></div>
+    </div>
+    <div class="game-legend" aria-label="비교 결과 범례">
+      <span class="legend-pill exact">일치 ≈</span>
+      <span class="legend-pill near">비슷함 ×</span>
+      <span class="legend-pill miss">다름</span>
+      <span class="legend-arrow">↑ 정답이 더 높음</span>
+      <span class="legend-arrow">↓ 정답이 더 낮음</span>
+    </div>
+    <div class="table-wrap">
+      <table class="guess-table">
+        <thead><tr><th>말딸</th><th>G1 승수</th><th>출생년도</th><th>신장</th><th>B / W / H</th><th>마장 적성</th><th>거리 적성</th><th>각질 적성</th></tr></thead>
+        <tbody id="guessBody"></tbody>
+      </table>
+    </div>
+    <div id="answerArea"></div>
+  </div>
+</section>
+
+<section id="dataPanel" class="panel hidden">
+  <div class="manager-top">
+    <div id="managerSummary" class="manager-summary"></div>
+    <div class="tool-row">
+      <button id="newBtn" class="secondary">+ 새 캐릭터</button>
+      <button id="exportBtn" class="secondary good">JSON 내보내기</button>
+      <label class="secondary filebtn">JSON 불러오기<input id="importFile" type="file" accept="application/json,.json"></label>
+      <button id="resetBtn" class="secondary danger">기본값 복원</button>
+    </div>
+  </div>
+  <div class="notice">수정한 데이터는 이 브라우저에 저장됩니다. 이미지 파일을 직접 넣으면 JSON 내보내기에도 Base64로 포함됩니다. <b>클래식 연도</b>를 포함해 게임 외 추가 데이터도 함께 보존됩니다.</div>
+  <div class="manager-grid">
+    <div class="manager-card">
+      <h3 id="editorTitle">캐릭터 편집</h3>
+      <input id="editId" type="hidden">
+      <div class="editor-grid">
+        <div class="field full"><label>이름</label><input id="fName"></div>
+        <div class="field full"><label>별명 / 검색어 (쉼표 구분)</label><input id="fAliases"></div>
+        <div class="img-editor">
+          <div id="imagePreview" class="preview">이미지 없음</div>
+          <div>
+            <div class="field"><label>이미지 경로 / URL</label><input id="fImage" placeholder="images/001.png 또는 https://..."></div>
+            <div class="field"><label>이미지 파일 업로드</label><input id="fImageFile" type="file" accept="image/*"></div>
+          </div>
+        </div>
+        <div class="section-label">기본 정보</div>
+        <div class="field"><label>G1 승수 (목록 자동계산)</label><input id="fG1" type="number" min="0" readonly></div>
+        <div class="field"><label>출생년도</label><input id="fBirth" type="number"></div>
+        <div class="field"><label>클래식 연도</label><input id="fClassic" type="number"></div>
+        <div class="field"><label>생일</label><input id="fBirthday"></div>
+        <div class="field"><label>신장 (cm)</label><input id="fHeight" type="number"></div>
+        <div class="field"><label>B</label><input id="fB" type="number"></div>
+        <div class="field"><label>W</label><input id="fW" type="number"></div>
+        <div class="field"><label>H</label><input id="fH" type="number"></div>
+        <div class="field full"><label>G1/JpnI/해외 G1 목록 (세미콜론 ; 구분)</label><textarea id="fG1Titles"></textarea></div>
+        <div class="section-label">적성 (A~G, 없으면 ?)</div>
+        <div class="apt-grid" id="aptEditor"></div>
+        <div class="field full"><label>메모 / 기타 데이터</label><textarea id="fNotes"></textarea></div>
+      </div>
+      <div class="editor-actions"><button id="saveBtn" class="primary">저장</button><button id="deleteBtn" class="secondary danger">삭제</button></div>
+    </div>
+    <div class="manager-card">
+      <h3>캐릭터 목록</h3>
+      <input id="managerSearch" class="manager-search" placeholder="이름 검색">
+      <div id="charList" class="char-list"></div>
+    </div>
+  </div>
+</section>
+</div>
+<div id="toast" class="toast"></div>
+<script src="data/characters.js"></script>
+<script>
+(()=>{
+const STORAGE='umaWordleDataV2';
+const APT_KEYS={
+ surface:[['turf','잔디'],['dirt','더트']],
+ distance:[['sprint','단거리'],['mile','마일'],['middle','중거리'],['long','장거리']],
+ style:[['front','도주'],['pace','선행'],['late','선입'],['end','추입']]
+};
+const APT_ORDER=['A','B','C','D','E','F','G'];
+const TOL={g1:1,birth:2,height:3,size:3};
+let data=loadData();
+let secret=null,limit=8,guesses=[],finished=false,selectedId=null,suggestionIndex=-1;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+function deepCopy(x){return JSON.parse(JSON.stringify(x))}
+function loadData(){
+  try{const s=localStorage.getItem(STORAGE); if(s){const x=JSON.parse(s); if(Array.isArray(x)&&x.length)return x}}catch(e){}
+  return deepCopy(window.DEFAULT_UMA_WORDLE_DATA||[])
+}
+function saveData(){localStorage.setItem(STORAGE,JSON.stringify(data)); renderManager();}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),1800)}
+function imageOf(c){return c?.customImage||c?.image||''}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function num(v){const n=Number(v);return Number.isFinite(n)?n:null}
+function normalize(s){return String(s||'').toLowerCase().replace(/\s+/g,'')}
+function aptVal(c,g,k){return c?.aptitudes?.[g]?.[k]||'?'}
+function compareNum(g,t,tol){
+  if(g==null||t==null)return {cls:'unknown',arrow:'',label:'?'};
+  const d=Math.abs(g-t),cls=d===0?'exact':d<=tol?'near':'miss';
+  return {cls,arrow:g===t?'≈':g<t?'↑':'↓'}
+}
+function compareApt(g,t){
+  g=(g||'?').toUpperCase();t=(t||'?').toUpperCase();
+  if(g==='?'||t==='?')return {cls:'unknown',arrow:''};
+  const gi=APT_ORDER.indexOf(g),ti=APT_ORDER.indexOf(t);
+  if(gi<0||ti<0)return {cls:g===t?'exact':'miss',arrow:''};
+  const d=Math.abs(gi-ti),cls=d===0?'exact':d===1?'near':'miss';
+  return {cls,arrow:gi===ti?'≈':ti<gi?'↑':'↓'}; // target closer to A = higher
+}
+function cmpBox(value,res,suffix=''){return `<div class="cmp ${res.cls}"><span>${esc(value)}${suffix}<span class="arrow">${res.arrow}</span></span></div>`}
+function mini(label,value,res,suffix=''){return `<div class="mini ${res.cls}"><em>${label}</em><b>${esc(value)}${suffix}${res.arrow?` ${res.arrow}`:''}</b></div>`}
+function findById(id){return data.find(c=>String(c.id)===String(id))}
+
+function switchPanel(id){
+  $$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.panel===id));
+  $$('.panel').forEach(p=>p.classList.toggle('hidden',p.id!==id));
+  if(id==='dataPanel')renderManager();
+}
+$$('.tab').forEach(b=>b.addEventListener('click',()=>switchPanel(b.dataset.panel)));
+
+function startGame(){
+  limit=Math.max(1,Math.min(30,parseInt($('#attemptLimit').value)||8));
+  $('#attemptLimit').value=limit;
+  if(!data.length){toast('데이터가 없습니다.');return}
+  secret=data[Math.floor(Math.random()*data.length)];guesses=[];finished=false;selectedId=null;suggestionIndex=-1;
+  $('#startScreen').classList.add('hidden');$('#playScreen').classList.remove('hidden');$('#guessBody').innerHTML='';$('#answerArea').innerHTML='';$('#guessInput').value='';
+  $('#limitLabel').textContent=limit;updateRemaining();closeSuggestions();$('#guessInput').focus();
+}
+function updateRemaining(){$('#remaining').textContent=Math.max(0,limit-guesses.length)}
+function stopToStart(){secret=null;finished=false;$('#playScreen').classList.add('hidden');$('#startScreen').classList.remove('hidden');closeSuggestions()}
+$('#startBtn').addEventListener('click',startGame);$('#quitBtn').addEventListener('click',stopToStart);
+
+function matches(c,q){const n=normalize(q); if(!n)return true;return [c.name,...(c.aliases||[])].some(x=>normalize(x).includes(n))}
+function showSuggestions(){
+  if(finished)return;
+  const q=$('#guessInput').value,used=new Set(guesses.map(g=>String(g.id)));
+  const list=data.filter(c=>matches(c,q));const box=$('#suggestions');
+  if(!list.length){box.innerHTML='<div class="suggestion"><div></div><div class="suggestion-name">검색 결과 없음</div></div>';box.classList.remove('hidden');return}
+  box.innerHTML=list.map((c,i)=>`<div class="suggestion ${i===suggestionIndex?'active':''}" data-id="${esc(c.id)}"><img src="${esc(imageOf(c))}" onerror="this.style.visibility='hidden'"><div><div class="suggestion-name">${esc(c.name)}</div><div class="suggestion-sub">${c.birthYear||'?'} · ${c.height||'?'}cm</div></div>${used.has(String(c.id))?'<span class="used">사용함</span>':''}</div>`).join('');
+  box.classList.remove('hidden');
+  $$('.suggestion[data-id]').forEach(el=>el.addEventListener('mousedown',e=>{e.preventDefault();selectSuggestion(el.dataset.id)}));
+}
+function selectSuggestion(id){const c=findById(id);if(!c)return;selectedId=c.id;$('#guessInput').value=c.name;closeSuggestions();}
+function closeSuggestions(){$('#suggestions').classList.add('hidden');suggestionIndex=-1}
+$('#guessInput').addEventListener('focus',showSuggestions);
+$('#guessInput').addEventListener('input',()=>{selectedId=null;suggestionIndex=-1;showSuggestions()});
+$('#guessInput').addEventListener('keydown',e=>{
+  const items=$$('#suggestions .suggestion[data-id]');
+  if(e.key==='ArrowDown'){e.preventDefault();suggestionIndex=Math.min(items.length-1,suggestionIndex+1);showSuggestions();scrollActive()}
+  else if(e.key==='ArrowUp'){e.preventDefault();suggestionIndex=Math.max(0,suggestionIndex-1);showSuggestions();scrollActive()}
+  else if(e.key==='Enter'){e.preventDefault();if(suggestionIndex>=0&&items[suggestionIndex])selectSuggestion(items[suggestionIndex].dataset.id);submitGuess()}
+  else if(e.key==='Escape')closeSuggestions();
+});
+function scrollActive(){requestAnimationFrame(()=>$('#suggestions .active')?.scrollIntoView({block:'nearest'}))}
+document.addEventListener('click',e=>{if(!e.target.closest('.guess-zone'))closeSuggestions()});
+$('#guessBtn').addEventListener('click',submitGuess);
+
+function resolveTyped(){
+  if(selectedId!=null)return findById(selectedId);
+  const q=normalize($('#guessInput').value);
+  return data.find(c=>normalize(c.name)===q||(c.aliases||[]).some(a=>normalize(a)===q));
+}
+function submitGuess(){
+  if(finished)return;
+  const c=resolveTyped();if(!c){toast('목록에서 캐릭터를 선택하세요.');showSuggestions();return}
+  if(guesses.some(g=>String(g.id)===String(c.id))){toast('이미 추측한 캐릭터입니다.');return}
+  guesses.push(c);renderGuess(c);updateRemaining();$('#guessInput').value='';selectedId=null;closeSuggestions();
+  if(String(c.id)===String(secret.id)){finishGame(true)}else if(guesses.length>=limit){finishGame(false)}else{$('#guessInput').focus();}
+}
+function renderGuess(c){
+  const g1=compareNum(num(c.g1Wins),num(secret.g1Wins),TOL.g1),by=compareNum(num(c.birthYear),num(secret.birthYear),TOL.birth),ht=compareNum(num(c.height),num(secret.height),TOL.height);
+  const sizes=['b','w','h'].map(k=>[k.toUpperCase(),c.sizes?.[k]??'?',compareNum(num(c.sizes?.[k]),num(secret.sizes?.[k]),TOL.size)]);
+  const aptGroup=g=>APT_KEYS[g].map(([k,l])=>[l,aptVal(c,g,k),compareApt(aptVal(c,g,k),aptVal(secret,g,k))]);
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><div class="who"><img src="${esc(imageOf(c))}" onerror="this.style.visibility='hidden'"><div><div class="who-name">${esc(c.name)}</div><div class="who-sub">${esc(c.birthday||'')}</div></div></div></td>
+    <td>${cmpBox(c.g1Wins??'?',g1,'승')}</td>
+    <td>${cmpBox(c.birthYear??'?',by,'년')}</td>
+    <td>${cmpBox(c.height??'?',ht,'cm')}</td>
+    <td><div class="group">${sizes.map(x=>mini(x[0],x[1],x[2])).join('')}</div></td>
+    <td><div class="group">${aptGroup('surface').map(x=>mini(x[0],x[1],x[2])).join('')}</div></td>
+    <td><div class="group">${aptGroup('distance').map(x=>mini(x[0],x[1],x[2])).join('')}</div></td>
+    <td><div class="group">${aptGroup('style').map(x=>mini(x[0],x[1],x[2])).join('')}</div></td>`;
+  $('#guessBody').prepend(tr);
+}
+function finishGame(win){
+  finished=true;closeSuggestions();$('#guessInput').blur();
+  const a=secret,apt=(g)=>APT_KEYS[g].map(([k,l])=>`${l} ${aptVal(a,g,k)}`).join(' · ');
+  $('#answerArea').innerHTML=`<div class="answer-card"><img src="${esc(imageOf(a))}" onerror="this.style.visibility='hidden'"><div><div class="result-title">${win?`정답! ${guesses.length}회 만에 성공`:`실패 · 정답 공개`}</div><h2>${esc(a.name)}</h2><div>${esc(a.birthYear)}년생 · 클래식 ${esc(a.classicYear)}년 · ${esc(a.height)}cm · B${esc(a.sizes?.b)} W${esc(a.sizes?.w)} H${esc(a.sizes?.h)}</div><div class="answer-stats"><span class="chip">G1 ${esc(a.g1Wins)}승</span><span class="chip">마장 ${esc(apt('surface'))}</span><span class="chip">거리 ${esc(apt('distance'))}</span><span class="chip">각질 ${esc(apt('style'))}</span></div><div class="answer-actions"><button id="againBtn" class="primary">같은 횟수로 다시</button><button id="homeBtn" class="secondary">설정으로</button></div></div></div>`;
+  $('#againBtn').addEventListener('click',startGame);$('#homeBtn').addEventListener('click',stopToStart);
+}
+
+// ----- Data manager -----
+function ensureAptEditor(){
+  if($('#aptEditor').children.length)return;
+  const all=[...APT_KEYS.surface,...APT_KEYS.distance,...APT_KEYS.style];
+  $('#aptEditor').innerHTML=all.map(([k,l])=>`<div class="field"><label>${l}</label><input id="apt_${k}" maxlength="1" placeholder="A~G"></div>`).join('');
+}
+function renderManager(){
+  ensureAptEditor();$('#managerSummary').textContent=`현재 ${data.length}명 · 브라우저 저장 데이터`;
+  const q=$('#managerSearch')?.value||'';const list=data.filter(c=>matches(c,q));
+  $('#charList').innerHTML=list.map(c=>`<div class="char-row"><img src="${esc(imageOf(c))}" onerror="this.style.visibility='hidden'"><div><div class="nm">${esc(c.name)}</div><div class="meta">G1 ${esc(c.g1Wins)}승 · ${esc(c.birthYear)}년 · ${esc(c.height)}cm · B${esc(c.sizes?.b)} W${esc(c.sizes?.w)} H${esc(c.sizes?.h)}</div></div><button data-edit="${esc(c.id)}">편집</button></div>`).join('');
+  $$('[data-edit]').forEach(b=>b.addEventListener('click',()=>editCharacter(b.dataset.edit)));
+}
+function clearEditor(){
+  ensureAptEditor();$('#editId').value='';$('#editorTitle').textContent='새 캐릭터';
+  ['fName','fAliases','fImage','fG1','fBirth','fClassic','fBirthday','fHeight','fB','fW','fH','fG1Titles','fNotes'].forEach(id=>$('#'+id).value='');
+  $('#imagePreview').innerHTML='이미지 없음';$$('#aptEditor input').forEach(x=>x.value='');$('#deleteBtn').classList.add('hidden');
+}
+function editCharacter(id){
+  const c=findById(id);if(!c)return;ensureAptEditor();$('#editId').value=c.id;$('#editorTitle').textContent=`${c.name} 편집`;
+  $('#fName').value=c.name||'';$('#fAliases').value=(c.aliases||[]).join(', ');$('#fImage').value=c.image||'';$('#fG1').value=c.g1Wins??0;$('#fBirth').value=c.birthYear??'';$('#fClassic').value=c.classicYear??'';$('#fBirthday').value=c.birthday||'';$('#fHeight').value=c.height??'';$('#fB').value=c.sizes?.b??'';$('#fW').value=c.sizes?.w??'';$('#fH').value=c.sizes?.h??'';$('#fG1Titles').value=(c.g1Titles||[]).join('; ');$('#fNotes').value=c.notes||'';
+  for(const [g,items] of Object.entries(APT_KEYS))for(const [k] of items)$('#apt_'+k).value=aptVal(c,g,k)==='?'?'':aptVal(c,g,k);
+  const src=imageOf(c);$('#imagePreview').innerHTML=src?`<img src="${esc(src)}">`:'이미지 없음';$('#deleteBtn').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});
+}
+function readApt(){const out={surface:{},distance:{},style:{}};for(const [g,items] of Object.entries(APT_KEYS))for(const [k] of items){let v=$('#apt_'+k).value.trim().toUpperCase();out[g][k]=APT_ORDER.includes(v)?v:'?'}return out}
+function nextId(){return Math.max(0,...data.map(c=>Number(c.id)||0))+1}
+function saveEditor(){
+  const name=$('#fName').value.trim();if(!name){toast('이름을 입력하세요.');return}
+  const id=$('#editId').value||nextId();const old=findById(id)||{};
+  const splitTitles=$('#fG1Titles').value.split(';').map(s=>s.trim()).filter(Boolean);$('#fG1').value=splitTitles.length;
+  const c={...old,id:Number.isFinite(Number(id))?Number(id):id,name,aliases:$('#fAliases').value.split(',').map(s=>s.trim()).filter(Boolean),image:$('#fImage').value.trim(),g1Wins:splitTitles.length,g1Titles:splitTitles,birthYear:num($('#fBirth').value),classicYear:num($('#fClassic').value),birthday:$('#fBirthday').value.trim(),height:num($('#fHeight').value),sizes:{b:num($('#fB').value),w:num($('#fW').value),h:num($('#fH').value)},aptitudes:readApt(),notes:$('#fNotes').value.trim()};
+  if(!c.classicYear&&c.birthYear)c.classicYear=c.birthYear+3;
+  const i=data.findIndex(x=>String(x.id)===String(id));if(i>=0)data[i]=c;else data.push(c);saveData();editCharacter(c.id);toast('저장했습니다.');
+}
+$('#saveBtn').addEventListener('click',saveEditor);$('#newBtn').addEventListener('click',clearEditor);$('#managerSearch').addEventListener('input',renderManager);
+$('#deleteBtn').addEventListener('click',()=>{const id=$('#editId').value;if(!id)return;if(!confirm('이 캐릭터를 삭제할까요?'))return;data=data.filter(c=>String(c.id)!==String(id));saveData();clearEditor();toast('삭제했습니다.');});
+$('#fG1Titles').addEventListener('input',()=>{const n=$('#fG1Titles').value.split(';').map(s=>s.trim()).filter(Boolean).length;$('#fG1').value=n;});
+$('#fImage').addEventListener('input',()=>{const src=$('#fImage').value.trim();$('#imagePreview').innerHTML=src?`<img src="${esc(src)}">`:'이미지 없음'});
+$('#fImageFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{const id=$('#editId').value;const src=String(r.result);$('#imagePreview').innerHTML=`<img src="${esc(src)}">`;$('#fImage').value='';if(id){const c=findById(id);if(c)c.customImage=src}else $('#imagePreview').dataset.pending=src};r.readAsDataURL(f)});
+// Capture pending/custom image just before save.
+const originalSave=saveEditor;
+$('#saveBtn').removeEventListener('click',saveEditor);
+$('#saveBtn').addEventListener('click',()=>{
+  const pending=$('#imagePreview').dataset.pending||'';const id=$('#editId').value;const existing=id?findById(id):null;const currentCustom=existing?.customImage||'';
+  originalSave();const saved=findById($('#editId').value);if(saved){const img=$('#imagePreview img')?.src||'';if(pending)saved.customImage=pending;else if(currentCustom&&!$('#fImage').value.trim())saved.customImage=currentCustom;saveData();delete $('#imagePreview').dataset.pending;}
+});
+
+$('#exportBtn').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`uma-wordle-data-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('JSON을 내보냈습니다.');
+});
+$('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(String(r.result));if(!Array.isArray(x))throw 0;data=x;saveData();clearEditor();toast(`${data.length}명 데이터를 불러왔습니다.`)}catch(err){toast('올바른 JSON 배열이 아닙니다.')}};r.readAsText(f,'utf-8');e.target.value='';});
+$('#resetBtn').addEventListener('click',()=>{if(!confirm('수정한 데이터를 모두 버리고 기본 142명 데이터로 되돌릴까요?'))return;data=deepCopy(window.DEFAULT_UMA_WORDLE_DATA||[]);localStorage.removeItem(STORAGE);renderManager();clearEditor();toast('기본값으로 복원했습니다.');});
+
+ensureAptEditor();renderManager();clearEditor();
+})();
+</script>
+</body>
+</html>
