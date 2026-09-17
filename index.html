@@ -21,6 +21,7 @@ header{display:flex;align-items:end;justify-content:space-between;gap:16px;margi
 .primary{border:0;background:var(--accent);color:#fff;border-radius:14px;padding:13px 24px;font-weight:950}.secondary{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font-weight:850}.danger{background:#feeaea;color:#a82323;border:1px solid #f5c7c7}.good{background:#eaf8ee;color:#176a35;border:1px solid #ccebd5}
 .legend{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:22px;color:#5f6771;font-size:13px;font-weight:800}.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}.dot.exact{background:var(--exact)}.dot.near{background:var(--near)}.dot.miss{background:var(--miss)}
 .game-legend{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:-2px auto 16px;font-size:13px;font-weight:900}.legend-pill{display:inline-flex;align-items:center;justify-content:center;border-radius:7px;padding:5px 9px;color:#fff;line-height:1.15;box-shadow:inset 0 0 0 1px #ffffff18}.legend-pill.exact{background:var(--exact)}.legend-pill.near{background:var(--near)}.legend-pill.miss{background:var(--miss)}.legend-arrow{color:#3f4854;white-space:nowrap;padding:4px 2px}
+.game-rule{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:-4px auto 16px;color:#5e6672;font-size:12px;font-weight:850}.rule-chip{background:#fff;border:1px solid #dfe4ea;border-radius:999px;padding:6px 10px;white-space:nowrap}.toggle-btn{border:1px solid #d3d9e2;background:#fff;color:#2a3240;border-radius:14px;padding:0 14px;font-weight:950;white-space:nowrap}.toggle-btn.on{background:#20242a;color:#fff;border-color:#20242a}.toggle-btn small{font-size:11px;opacity:.9;margin-left:4px}.prank-cover{position:relative;min-height:58px;border-radius:10px;overflow:hidden;border:1px solid #ddd;background:#e8eaee;display:flex;align-items:center;justify-content:center}.prank-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.prank-cover span{position:relative;z-index:1;background:#20242acc;color:#fff;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:950;backdrop-filter:blur(2px)}
 .game-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.status{font-weight:950}.status b{font-size:24px}.guess-zone{position:relative;max-width:680px;margin:0 auto 18px}.guess-row{display:flex;gap:8px}.guess-input{flex:1;border:2px solid #cfd5dd;background:#fff;border-radius:14px;padding:13px 15px;font-weight:850;outline:none}.guess-input:focus{border-color:#7898d7}.guess-btn{border:0;background:#20242a;color:#fff;border-radius:14px;padding:0 22px;font-weight:950}.suggestions{position:absolute;z-index:30;top:calc(100% + 7px);left:0;right:80px;max-height:300px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 15px 35px #11182725}.suggestion{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid #edf0f3}.suggestion:last-child{border-bottom:0}.suggestion:hover,.suggestion.active{background:#f3f6fb}.suggestion img{width:42px;height:50px;object-fit:cover;border-radius:8px;background:#eceff3}.suggestion-name{font-weight:900}.suggestion-sub{font-size:12px;color:#7a828c}.used{color:#a5abb3;font-size:11px}
 .table-wrap{overflow:auto;background:#fff;border:1px solid #e6eaef;border-radius:18px;box-shadow:0 7px 24px #1d24300e}.guess-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1180px}.guess-table th{position:sticky;top:0;background:#f7f8fa;z-index:2;padding:12px 8px;border-bottom:1px solid var(--line);font-size:12px;white-space:nowrap}.guess-table td{padding:8px;border-bottom:1px solid #edf0f3;vertical-align:middle}.guess-table tr:last-child td{border-bottom:0}.who{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center;min-width:175px}.who img{width:54px;height:68px;object-fit:cover;border-radius:9px;background:#eceff3}.who-name{font-weight:950}.who-sub{font-size:11px;color:#7d858f;margin-top:4px}
 .cmp{min-height:58px;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;color:white;font-weight:950;padding:7px 6px;line-height:1.15}.cmp.exact{background:var(--exact)}.cmp.near{background:var(--near)}.cmp.miss{background:var(--miss)}.cmp.unknown{background:#bec3c9;color:#42474d}.cmp small{display:block;font-size:10px;opacity:.92;margin-top:4px}.arrow{font-size:17px;margin-left:3px}.group{display:flex;gap:5px;justify-content:center;min-width:max-content}.mini{min-width:44px;min-height:58px;padding:6px 4px;border-radius:9px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:12px}.mini.exact{background:var(--exact)}.mini.near{background:var(--near)}.mini.miss{background:var(--miss)}.mini.unknown{background:#bec3c9;color:#42474d}.mini em{font-style:normal;font-size:10px;opacity:.9;margin-bottom:2px}.mini b{font-size:14px}
@@ -54,7 +55,7 @@ header{display:flex;align-items:end;justify-content:space-between;gap:16px;margi
   <div id="playScreen" class="hidden">
     <div class="game-head"><div class="status">남은 기회 <b id="remaining">0</b> / <span id="limitLabel">0</span></div><button id="quitBtn" class="secondary">게임 종료</button></div>
     <div class="guess-zone">
-      <div class="guess-row"><input id="guessInput" class="guess-input" autocomplete="off" placeholder="말딸 이름을 입력하거나 목록에서 선택"><button id="guessBtn" class="guess-btn">추측</button></div>
+      <div class="guess-row"><input id="guessInput" class="guess-input" autocomplete="off" placeholder="말딸 이름을 입력하거나 목록에서 선택"><button id="guessBtn" class="guess-btn">추측</button><button id="prankToggle" class="toggle-btn" type="button" aria-pressed="false">장난 모드 <small>OFF</small></button></div>
       <div id="suggestions" class="suggestions hidden"></div>
     </div>
     <div class="game-legend" aria-label="비교 결과 범례">
@@ -63,6 +64,13 @@ header{display:flex;align-items:end;justify-content:space-between;gap:16px;margi
       <span class="legend-pill miss">다름</span>
       <span class="legend-arrow">↑ 정답이 더 높음</span>
       <span class="legend-arrow">↓ 정답이 더 낮음</span>
+    </div>
+    <div class="game-rule" aria-label="비슷함 판정 기준">
+      <span class="rule-chip">G1 ±1</span>
+      <span class="rule-chip">출생년도 ±2</span>
+      <span class="rule-chip">신장 ±3cm</span>
+      <span class="rule-chip">B / W / H ±3cm</span>
+      <span class="rule-chip">적성 ±1등급</span>
     </div>
     <div class="table-wrap">
       <table class="guess-table">
@@ -135,8 +143,10 @@ const APT_KEYS={
 };
 const APT_ORDER=['A','B','C','D','E','F','G'];
 const TOL={g1:1,birth:2,height:3,size:3};
+const PRANK_FIELDS=['g1','birth','height','sizes','aptitudes'];
+const PRANK_COVER='images/prank-cover.png';
 let data=loadData();
-let secret=null,limit=8,guesses=[],finished=false,selectedId=null,suggestionIndex=-1;
+let secret=null,limit=8,guesses=[],finished=false,selectedId=null,suggestionIndex=-1,prankMode=false,prankHiddenKeys={};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 
 function deepCopy(x){return JSON.parse(JSON.stringify(x))}
@@ -167,6 +177,13 @@ function compareApt(g,t){
 function cmpBox(value,res,suffix=''){return `<div class="cmp ${res.cls}"><span>${esc(value)}${suffix}<span class="arrow">${res.arrow}</span></span></div>`}
 function mini(label,value,res,suffix=''){return `<div class="mini ${res.cls}"><em>${label}</em><b>${esc(value)}${suffix}${res.arrow?` ${res.arrow}`:''}</b></div>`}
 function findById(id){return data.find(c=>String(c.id)===String(id))}
+function guessKey(c,idx){return `${c?.id ?? 'x'}_${idx}`}
+function randomPrankField(){return PRANK_FIELDS[Math.floor(Math.random()*PRANK_FIELDS.length)]}
+function coverBox(){return `<div class="prank-cover"><img src="${esc(PRANK_COVER)}" alt="가려짐"><span>가려짐</span></div>`}
+function coverMiniGroup(count=1){return `<div class="group">${Array.from({length:count},()=>coverBox()).join('')}</div>`}
+function getPrankField(c,idx){if(!prankMode)return ''; const k=guessKey(c,idx); if(!prankHiddenKeys[k]) prankHiddenKeys[k]=randomPrankField(); return prankHiddenKeys[k]}
+function updatePrankToggle(){const btn=$('#prankToggle'); if(!btn) return; btn.classList.toggle('on',prankMode); btn.setAttribute('aria-pressed',prankMode?'true':'false'); btn.innerHTML=`장난 모드 <small>${prankMode?'ON':'OFF'}</small>`}
+function renderAllGuesses(){const body=$('#guessBody'); if(!body) return; body.innerHTML=''; guesses.forEach((g,idx)=>renderGuess(g,idx));}
 
 function switchPanel(id){
   $$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.panel===id));
@@ -179,9 +196,9 @@ function startGame(){
   limit=Math.max(1,Math.min(30,parseInt($('#attemptLimit').value)||8));
   $('#attemptLimit').value=limit;
   if(!data.length){toast('데이터가 없습니다.');return}
-  secret=data[Math.floor(Math.random()*data.length)];guesses=[];finished=false;selectedId=null;suggestionIndex=-1;
+  secret=data[Math.floor(Math.random()*data.length)];guesses=[];finished=false;selectedId=null;suggestionIndex=-1;prankHiddenKeys={};
   $('#startScreen').classList.add('hidden');$('#playScreen').classList.remove('hidden');$('#guessBody').innerHTML='';$('#answerArea').innerHTML='';$('#guessInput').value='';
-  $('#limitLabel').textContent=limit;updateRemaining();closeSuggestions();$('#guessInput').focus();
+  $('#limitLabel').textContent=limit;updateRemaining();closeSuggestions();updatePrankToggle();$('#guessInput').focus();
 }
 function updateRemaining(){$('#remaining').textContent=Math.max(0,limit-guesses.length)}
 function stopToStart(){secret=null;finished=false;$('#playScreen').classList.add('hidden');$('#startScreen').classList.remove('hidden');closeSuggestions()}
@@ -211,6 +228,7 @@ $('#guessInput').addEventListener('keydown',e=>{
 function scrollActive(){requestAnimationFrame(()=>$('#suggestions .active')?.scrollIntoView({block:'nearest'}))}
 document.addEventListener('click',e=>{if(!e.target.closest('.guess-zone'))closeSuggestions()});
 $('#guessBtn').addEventListener('click',submitGuess);
+$('#prankToggle').addEventListener('click',()=>{prankMode=!prankMode;updatePrankToggle();renderAllGuesses();});
 
 function resolveTyped(){
   if(selectedId!=null)return findById(selectedId);
@@ -221,23 +239,31 @@ function submitGuess(){
   if(finished)return;
   const c=resolveTyped();if(!c){toast('목록에서 캐릭터를 선택하세요.');showSuggestions();return}
   if(guesses.some(g=>String(g.id)===String(c.id))){toast('이미 추측한 캐릭터입니다.');return}
-  guesses.push(c);renderGuess(c);updateRemaining();$('#guessInput').value='';selectedId=null;closeSuggestions();
+  guesses.push(c);renderGuess(c,guesses.length-1);updateRemaining();$('#guessInput').value='';selectedId=null;closeSuggestions();
   if(String(c.id)===String(secret.id)){finishGame(true)}else if(guesses.length>=limit){finishGame(false)}else{$('#guessInput').focus();}
 }
-function renderGuess(c){
+function renderGuess(c,idx){
+  const prankField=getPrankField(c,idx);
   const g1=compareNum(num(c.g1Wins),num(secret.g1Wins),TOL.g1),by=compareNum(num(c.birthYear),num(secret.birthYear),TOL.birth),ht=compareNum(num(c.height),num(secret.height),TOL.height);
   const sizes=['b','w','h'].map(k=>[k.toUpperCase(),c.sizes?.[k]??'?',compareNum(num(c.sizes?.[k]),num(secret.sizes?.[k]),TOL.size)]);
   const aptGroup=g=>APT_KEYS[g].map(([k,l])=>[l,aptVal(c,g,k),compareApt(aptVal(c,g,k),aptVal(secret,g,k))]);
   const tr=document.createElement('tr');
+  const g1Html=prankField==='g1'?coverBox():cmpBox(c.g1Wins??'?',g1,'승');
+  const birthHtml=prankField==='birth'?coverBox():cmpBox(c.birthYear??'?',by,'년');
+  const heightHtml=prankField==='height'?coverBox():cmpBox(c.height??'?',ht,'cm');
+  const sizeHtml=prankField==='sizes'?coverMiniGroup(3):`<div class="group">${sizes.map(x=>mini(x[0],x[1],x[2])).join('')}</div>`;
+  const surfaceHtml=prankField==='aptitudes'?coverMiniGroup(2):`<div class="group">${aptGroup('surface').map(x=>mini(x[0],x[1],x[2])).join('')}</div>`;
+  const distanceHtml=prankField==='aptitudes'?coverMiniGroup(4):`<div class="group">${aptGroup('distance').map(x=>mini(x[0],x[1],x[2])).join('')}</div>`;
+  const styleHtml=prankField==='aptitudes'?coverMiniGroup(4):`<div class="group">${aptGroup('style').map(x=>mini(x[0],x[1],x[2])).join('')}</div>`;
   tr.innerHTML=`
     <td><div class="who"><img src="${esc(imageOf(c))}" onerror="this.style.visibility='hidden'"><div><div class="who-name">${esc(c.name)}</div><div class="who-sub">${esc(c.birthday||'')}</div></div></div></td>
-    <td>${cmpBox(c.g1Wins??'?',g1,'승')}</td>
-    <td>${cmpBox(c.birthYear??'?',by,'년')}</td>
-    <td>${cmpBox(c.height??'?',ht,'cm')}</td>
-    <td><div class="group">${sizes.map(x=>mini(x[0],x[1],x[2])).join('')}</div></td>
-    <td><div class="group">${aptGroup('surface').map(x=>mini(x[0],x[1],x[2])).join('')}</div></td>
-    <td><div class="group">${aptGroup('distance').map(x=>mini(x[0],x[1],x[2])).join('')}</div></td>
-    <td><div class="group">${aptGroup('style').map(x=>mini(x[0],x[1],x[2])).join('')}</div></td>`;
+    <td>${g1Html}</td>
+    <td>${birthHtml}</td>
+    <td>${heightHtml}</td>
+    <td>${sizeHtml}</td>
+    <td>${surfaceHtml}</td>
+    <td>${distanceHtml}</td>
+    <td>${styleHtml}</td>`;
   $('#guessBody').prepend(tr);
 }
 function finishGame(win){
@@ -299,7 +325,7 @@ $('#exportBtn').addEventListener('click',()=>{
 $('#importFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(String(r.result));if(!Array.isArray(x))throw 0;data=x;saveData();clearEditor();toast(`${data.length}명 데이터를 불러왔습니다.`)}catch(err){toast('올바른 JSON 배열이 아닙니다.')}};r.readAsText(f,'utf-8');e.target.value='';});
 $('#resetBtn').addEventListener('click',()=>{if(!confirm('수정한 데이터를 모두 버리고 기본 142명 데이터로 되돌릴까요?'))return;data=deepCopy(window.DEFAULT_UMA_WORDLE_DATA||[]);localStorage.removeItem(STORAGE);renderManager();clearEditor();toast('기본값으로 복원했습니다.');});
 
-ensureAptEditor();renderManager();clearEditor();
+ensureAptEditor();renderManager();clearEditor();updatePrankToggle();
 })();
 </script>
 </body>
